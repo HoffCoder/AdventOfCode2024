@@ -34,34 +34,41 @@ public class DayTwo {
 
         String[] handAndGames = line.split(":");
         String ID = handAndGames[0].split(" ")[1];
-        System.out.println(ID);
+        int[] counts;
+        int[] bests = {0,0,0};
         for(String game : handAndGames[1].split(";")){
-            if(!ParseGame(game)){
-                return 0;
+            counts = ParseGame(game);
+            for(int index = 0; index < 3; index++){
+                if(counts[index] > bests[index]){
+                    bests[index] = counts[index];
+                }
             }
         }
 
-        return Integer.parseInt(ID);
+        return bests[0] * bests[1] * bests[2] ;
 
     }
 
-    private static boolean ParseGame(String game) {
+    private static int[] ParseGame(String game) {
         String[] hands = game.split(",");
+
+        int greenMax = 0;
+        int redMax = 0;
+        int blueMax = 0;
         for(String hand : hands){
             String[] colors = hand.split(" ");
-            System.out.println(Arrays.toString(colors));
             switch (colors[2]){
                 case "green":
-                    if (Integer.parseInt(colors[1]) > 13 ){return false;}
+                    greenMax = Integer.parseInt(colors[1]);
                     break;
                 case "red":
-                    if (Integer.parseInt(colors[1]) > 12 ){return false;}
+                    redMax = Integer.parseInt(colors[1]);
                     break;
                 case "blue":
-                    if (Integer.parseInt(colors[1]) > 14 ){return false;}
+                    blueMax = Integer.parseInt(colors[1]);
                     break;
             }
         }
-        return true;
+        return new int[]{greenMax, redMax, blueMax};
     }
 }
